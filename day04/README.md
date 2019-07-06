@@ -90,8 +90,8 @@ mysite中的urls.py是mysite项目的总路由,进行路由分发
 from django.conf.urls import include
  
 urlpatterns = patterns[
-    url(r'^web/', include('web.url')),
-    url(r'^app01/', include('app01.url')),
+    url(r'^blog/', include('blog.urls')),
+    url(r'^jumpserver/', include('jumpserver.urls')),
 ]
 ```
 blog中的urls.py
