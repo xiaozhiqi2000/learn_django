@@ -1,9 +1,11 @@
 # 今天主要内容
 1. [django Settings配置文件]()
 
-## settings配置文件
-[Django1.11 settings](https://docs.djangoproject.com/en/1.11/ref/settings/)
-[Django1.11 settings](https://docs.djangoproject.com/en/1.11/topics/settings/)
+参考：
+
+[Django1.11 官网settings](https://docs.djangoproject.com/en/1.11/ref/settings/)
+
+[Django1.11 官网settings](https://docs.djangoproject.com/en/1.11/topics/settings/)
 
 ### 1.django默认创建app会在这里注册,在创建app时,需要手动添加来
 ```
@@ -67,18 +69,16 @@ TEMPLATES = [
 STATIC_URL = '/static/'  
  
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR,'static'),
+    os.path.join(BASE_DIR, 'static'),
 )
 ```
 
-### 5.upload是自己创建的目录用于图片上传，需要settings中设置 MEDIA_URL
-MEDIA_ROOT：是本地路径的绝对路径，一般是这样写
-
-MEDIA_URL：是指从浏览器访问时的地址前缀,这里也是一个别名
+### 5.upload上传目录设置
+- upload是自己创建的目录用于图片上传，需要settings中设置 MEDIA_URL
 #### settings怎么设置呢？
 ```
-MEDIA_URL = '/upload/'
-MEDIA_ROOT = os.path.join(BASE_DIR,'upload')
+MEDIA_URL = '/upload/'       #MEDIA_ROOT是本地路径的绝对路径，一般是这样写
+MEDIA_ROOT = os.path.join(BASE_DIR, 'upload')  #MEDIA_URL：是指从浏览器访问时的地址前缀,这里也是一个别名
 ```
 #### url怎么设置呢？
 ```
@@ -89,10 +89,12 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^upload/', views.upload),
+    url(r'^uploadimg/', views.uploadImg),
+    url(r'^showimg/', views.uploadImg),
 ] + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) 
 
-# url(r'^upload/(?P<path>.*)$', "django.views.static.serve", {"document_root": settings.MEDIA_ROOT,}),  #以前是这种
+# 以前的django版本是这样的
+# url(r'^upload/(?P<path>.*)$', "django.views.static.serve", {"document_root": settings.MEDIA_ROOT,}), 
 ```
 #### models怎么设置呢？
 ```
@@ -100,27 +102,27 @@ from django.db import models
 
 class IMG(models.Model):
     '''
-    图片上传的路径就会在/upload/article/2016/09/23/a1.jpg
-    浏览器访问：http://127.0.0.1:8000/upload/article/2016/09/23/a1.jpg
+    图片上传的路径就会在/upload/2019/07/06/a1.jpg
+    浏览器访问：http://127.0.0.1:8000/upload/2019/07/06/a1.jpg
     '''
-    head_img = models.ImageField(max_length=200,upload_to='article/%Y/%m/%d',\
-                                default='article/default.png',null=True,blank=True)
+    head_img = models.ImageField(max_length=200,upload_to='%Y/%m/%d',\
+                                default='default.png',null=True,blank=True)
 ```
 #### views怎么设置？
 ```
 from django.shortcuts import render
-from uploadImg.models import IMG
+from django.db import models
 
 def uploadImg(request):
     if request.method == 'POST':
-        new_img = IMG(
-            img=request.FILES.get('img')
+        new_img = models.IMG(
+            head_img=request.FILES.get('img')
         )
         new_img.save()
     return render(request, 'uploadimg.html')
 
 def showImg(request):
-    imgs = IMG.objects.all()
+    imgs = models.IMG.objects.all()
     content = {
         'imgs':imgs,
     }
@@ -129,7 +131,7 @@ def showImg(request):
 #### html怎么设置？
 uploadimg.html
 ```
-<form method="POST" enctype="multipart/form-data">
+<form action="/uploadimg/" method="POST" enctype="multipart/form-data">
     <input type="file" name="img">
     <button type="submit">上传</button>
     {% csrf_token %}
@@ -142,6 +144,46 @@ showimg.html
 {% endfor %}
 ```
 
+### 6.文件上传
+参考：
+
+[Django1.11 官网settings](https://docs.djangoproject.com/en/1.11/topics/settings/)
+
+文件上传类似,前端form属性要有enctype='multipart/form-data'，models中的字段为models.FileField(max_length='',upload_to='')
+
+#### url 设置
+```
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    url(r'^uploadfile/', views.upload_file),
+]
+```
+#### views 设置
+```
+from django.shortcuts import render,redirect
+
+def upload_file(request):
+    if request.method == 'POST':
+        for item in request.FILES:
+            obj = request.FILES.get(item,None)
+            filename = obj.name
+            path = 'upload/file' + filename
+            with open(path, 'wb+') as f:
+                for chunk in obj.chunks():
+                    f.write(chunk)
+
+            return redirect('/uploadfile/')
+
+    return render(request, 'uploadfile.html')
+```
+#### html
+```
+<form action="/uploadfile/" method="POST" enctype="multipart/form-data">
+    <input type="file" name="img">
+    <button type="submit">上传</button>
+    {% csrf_token %}
+</form>
+```
 
 
 
