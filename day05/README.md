@@ -4,6 +4,7 @@
 参考：
 
 [Django1.11 官网HttpResponse](https://docs.djangoproject.com/en/1.11/topics/http/shortcuts/)
+
 [Django1.11 官网Response与Request](https://docs.djangoproject.com/en/1.11/ref/request-response/)
 
 
@@ -14,9 +15,7 @@ http请求中产生两个核心对象：
 - http请求：HttpRequest对象
 - http响应：HttpResponse对象
 
-所在位置：django.http
-
-### HttpRequest对象
+### 1.HttpRequest对象
 - HttpRequest属性
 ```
 path：      请求页面的全路径，不包括域名
@@ -41,7 +40,7 @@ raw_post_data:  原始HTTP POST数据，未解析过。高级处理时会有用�
 get_full_path()：返回包含查询字符串的请求路径。例如， "/music/bands/the_beatles/?print=true"
 ```
 
-### HttpResponse对象
+### 2.HttpResponse对象
 对于HttpRequest 对象来说，是由Django自动创建, 但是，HttpResponse对象就必须我们自己创建。
 
 每个View请求处理方法必须返回一个HttpResponse对象。如果没有返回，则会捕获valueerror异常，HttpResponse类在django.http.HttpResponse
@@ -49,14 +48,16 @@ get_full_path()：返回包含查询字符串的请求路径。例如， "/music
 #### 构造HttpResponse
 在HttpResponse对象上常用方法：HttpResponse()、render()、render_to_response()、redirect(重定向)
 
-render与render_to_response区别在于第一个参数是否要request，所以就用render
-
-表单提交的时候render_to_response还需要添加 context_instance=RequestContext(request)否则会报csrf错误
+- render与render_to_response区别在于第一个参数是否要request，所以就用render
+- 表单提交的时候render_to_response还需要添加 context_instance=RequestContext(request)否则会报csrf错误
 ```
 HttpResponse("Here's the text of the Web page.")
 HttpResponse("Text only, please.", mimetype="text/plain")
+
 render(request,'index.html',{向模板传递的变量})
+
 render_to_response('index.html',{向模板传递的变量})
+
 redirect("http://www.baidu.com")  或者 redirect("/blog/py/login")
 ```
 
