@@ -1,5 +1,5 @@
 # 今天主要内容
-1. [django Settings配置文件]()
+[django Settings配置文件]()
 
 参考：
 

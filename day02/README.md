@@ -33,12 +33,15 @@ pip install django==1.11.15 -i http://pypi.douban.com/simple --trusted-host pypi
 ```
 
 ## 三、常用命令
+python manage.py 直接执行会打印全部命令
 ```
 django-admin startproject sitename       #创建一个项目叫sitename
 django-admin startapp appname            #创建一个app叫appname
-python manage.py runserver 0.0.0.0:8000  #启动wsgi,打开浏览器即可访问你的IP:8000
 python manage.py makemigrations          #app目录下创建migrations目录，并记录下你所有关于models.py的改动
 python manage.py migrate                 #将migrations目录的.py在数据库中创建表修改表等等操作
+python manage.py flush                   #清空数据库
+python manage.py runserver 0.0.0.0:8000  #启动wsgi,打开浏览器即可访问你的IP:8000
+python manage.py shell                   #shell里面调用当前项目的models.py中的API，对于操作数据，还有一些小测试非常方便
 python manage.py createsuperuser         #django默认是有个后台,在urls已经配置,这个是创建后台用户
 python manage.py changepassword          #django默认后台用户的密码
 python manage.py clearsessions           #清除会话
