@@ -15,7 +15,7 @@ Django、web2py、TurboGears、Pylons、...
 - Non Full-Stack Frameworks（非全栈框架、轻量级的框架）：
 tornado、Flask、Bottle、web.py、Pyramid、...
 
-[详见：](https://wiki.python.org/moin/WebFrameworks)
+[详见python官网有哪些框架](https://wiki.python.org/moin/WebFrameworks)
 
 ### 3.如何选择框架
 - 根据项目需求去选择。
@@ -23,7 +23,7 @@ tornado、Flask、Bottle、web.py、Pyramid、...
 
 国内常用：django、tornado、flask、bottle，Django相较与其他WEB框架其优势为：大而全，框架本身集成了ORM、模型绑定、模板引擎、缓存、Session等诸多功能。
 
-[Django1.11官网：](https://docs.djangoproject.com/en/1.11/)
+[Django1.11官网](https://docs.djangoproject.com/en/1.11/)
 
 ## 二、安装
 使用pip安装或者pycharm安装都可以
@@ -45,6 +45,8 @@ python manage.py clearsessions           #清除会话
 ```
 
 ## 四、创建项目查看目录结构
+- static是自己创建的目录用于放置js,css,image等等，需要settings中配置
+- upload是自己创建的目录用于图片上传,需要在settings中配置
 ```
 (py36) [root@localhost ~]# django-admin startproject mysite
 (py36) [root@localhost ~]# tree mysite
@@ -56,7 +58,7 @@ mysite
     ├── urls.py
     └── wsgi.py
 
-(py36) [root@localhost ~]# mkdir -p mysite/blog
+(py36) [root@localhost ~]# mkdir -p mysite/{blog,static,upload}
 (py36) [root@localhost ~]# django-admin startapp blog mysite/blog
 (py36) [root@localhost ~]# tree mysite
 mysite
@@ -70,10 +72,12 @@ mysite
 │   ├── tests.py
 │   └── views.py
 ├── manage.py
-└── mysite
-    ├── __init__.py
-    ├── settings.py
-    ├── urls.py
-    └── wsgi.py
+├── mysite
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── static
+└── upload
 
 ```
