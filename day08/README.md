@@ -8,22 +8,19 @@
 
 [Django1.11 官网不具有QuerySet的方法](https://docs.djangoproject.com/en/1.11/ref/models/querysets/#methods-that-do-not-return-querysets)
 
-### QuerySet 特点
-- 可迭代
-- 可切片
-QuerySet 是一个对象集合,所以取值是要通过迭代取值的
+### 1.QuerySet 特点
+- QuerySet 是一个对象集合,所以取值是要通过迭代取值的,也可以切片
+- QuerySet 不会马上执行sql，而是当调用QuerySet的时候才执行
 
-QuerySet 不会马上执行sql，而是当调用QuerySet的时候才执行
-
-### QuerySet 惰性机制
-#### 1.Django的queryset是惰性的
+### 2.QuerySet 惰性机制
+#### (1)Django的queryset是惰性的
 ```
 Django的queryset对应于数据库的若干记录（row），通过可选的查询来过滤。例如，下面的代码会得
 到数据库中名字为‘Dave’的所有的人:person_set = Person.objects.filter(first_name="Dave")
 上面的代码并没有运行任何的数据库查询。你可以使用person_set，给它加上一些过滤条件，或者将它传给某个函数，
 这些操作都不会发送给数据库。这是对的，因为数据库查询是显著影响web应用性能的因素之一。
 ```
-#### 2.要真正从数据库获得数据，你可以遍历queryset或者使用if queryset,总之你用到数据时就会执行sql.
+#### (2)要真正从数据库获得数据，你可以遍历queryset或者使用if queryset,总之你用到数据时就会执行sql.
 ```
 为了验证这些,需要在settings里加入 LOGGING(验证方式)
 obj=models.Book.objects.filter(id=3)
@@ -33,7 +30,7 @@ obj=models.Book.objects.filter(id=3)
 # if obj:
 #     print("ok")
 ```
-#### 3.queryset是具有cache的
+#### (3)queryset是具有cache的
 ```
 当你遍历queryset时，所有匹配的记录会从数据库获取，然后转换成Django的model。这被称为执行
 （evaluation）.这些model会保存在queryset内置的cache中，这样如果你再次遍历这个queryset，
@@ -49,14 +46,14 @@ obj=models.Book.objects.filter(id=3)
 # for i in obj:
 #     print(i)   #LOGGING只会打印一次
 ```
-#### 4.简单的使用if语句进行判断也会完全执行整个queryset并且把数据放入cache，虽然你并不需要这些数据！为了避免这个，可以用exists()方法来检查是否有数据：
+#### (4)简单的使用if语句进行判断也会完全执行整个queryset并且把数据放入cache，虽然你并不需要这些数据！为了避免这个，可以用exists()方法来检查是否有数据：
 ```
 obj = Book.objects.filter(id=4)
 #  exists()的检查可以避免数据放入queryset的cache。
 if obj.exists():
     print("hello world!")
 ```
-#### 5.当queryset非常巨大时，cache会成为问题
+#### (5)当queryset非常巨大时，cache会成为问题
 ```
 处理成千上万的记录时，将它们一次装入内存是很浪费的。更糟糕的是，巨大的queryset可能会锁住系统
 进程，让你的程序濒临崩溃。要避免在遍历数据的同时产生queryset cache，可以使用iterator()方法
@@ -178,8 +175,9 @@ models.类名.objects.filter(name='seven').order_by('-id')   # desc,从大到小
 models.类名.objects.all()[10:20]
 ```
 #### 15.分组与聚合：group_by,annotate,aggregate
-[Django1.11 官网](https://docs.djangoproject.com/en/1.11/topics/db/aggregation/)
-[Django1.11 官网](https://docs.djangoproject.com/en/1.11/topics/db/annotate/)
+[Django1.11 官网aggregation](https://docs.djangoproject.com/en/1.11/topics/db/aggregation/)
+
+[Django1.11 官网annotate](https://docs.djangoproject.com/en/1.11/topics/db/annotate/)
 ```
 annotate(*args, **kwargs)：可以为 QuerySet 中的每个对象添加注解。可以通过计算查询结果中每个对象所关联的对象集合，从而得出总计值(也可以是平均值或总和，等等)
 aggregate(*args, **kwargs)：通过对 QuerySet 进行计算，返回一个聚合值的字典。 aggregate() 中每个参数都指定一个包含在字典中的返回值。用于聚合查询
@@ -197,9 +195,9 @@ from django.db.models import Count, Min, Max, Sum
 
 ## 三、原生SQL
 注意：使用原生sql的方式主要目的是解决一些很复杂的sql，不能用ORM的方式写出的问题。
-extra：结果集修改器 - 一种提供额外查询参数的机制
-raw：执行原始sql并返回模型实例，最适合用于查询,(异常：Raw query must include the primary key,返回结果必须包含主键)
-直接执行自定义SQL（这种方式完全不依赖model，前面两种方式还是要依赖于model），适合增删改
+- extra：结果集修改器 - 一种提供额外查询参数的机制
+- raw：执行原始sql并返回模型实例，最适合用于查询,(异常：Raw query must include the primary key,返回结果必须包含主键)
+- 直接执行自定义SQL（这种方式完全不依赖model，前面两种方式还是要依赖于model），适合增删改
 
 ```
 A.使用extra：
