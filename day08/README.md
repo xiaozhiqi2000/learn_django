@@ -220,3 +220,7 @@ raw = cursor.fetchone()                       #返回结果行
 cursor.fetchall()
 
 ```
+[Django1.11 官网原生sql](https://docs.djangoproject.com/en/1.11/topics/db/sql/)
+
+## 四、自定义Manager
+https://docs.djangoproject.com/en/1.11/topics/db/managers/
