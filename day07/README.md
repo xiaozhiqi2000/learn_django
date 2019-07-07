@@ -1,5 +1,5 @@
 # 今天主要内容
-[django Model模型]()
+[django Model(一)]()
 
 参考：
 
@@ -238,3 +238,4 @@ class Book(models.Model):
    - 一对多：就是主外键关系；（foreign key）
    - 多对多：(ManyToManyField) 自动创建第三张表(当然我们也可以自己创建第三张表：两个foreign key)
 
+[Django1.11 官网关系](https://docs.djangoproject.com/en/1.11/topics/db/models/#relationships)
