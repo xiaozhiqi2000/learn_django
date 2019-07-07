@@ -1,5 +1,5 @@
 # 今天主要内容
-[django Template]()
+[django Template模板语言]()
 
 参考：
 
@@ -16,22 +16,22 @@ return render(request,"index.html",{"name":"alex"})
 # {"name":"alex"}是上下文
 ```
 
-Django是HttpResponse如何将template,context封装到render中
-### 手动嵌套变量到模板中
+###Django是HttpResponse如何将template,context封装到render中
+#### 1.手动嵌套变量到模板中
 ```
 def current_datetime(request):
     now = datetime.datetime.now()
     html = "<html><body>It is now %s.</body></html>" % now
     return HttpResponse(html)
 ```
-### django通过模板语言将变量嵌套html中(一)
+#### 2.django通过模板语言将变量嵌套html中(一)
 ```
 from django import template
 t = template.Template('My name is {{ name }}.')
 c = template.Context({'name': 'Adrian'})
 print(t.render(c))
 ```
-### django通过模板语言将变量嵌套html中(二)
+#### 3.django通过模板语言将变量嵌套html中(二)
 ```
 import datetime
 from django import template
@@ -44,7 +44,7 @@ fp.close()
 html = t.render(template.Context({'current_date': now}))
 return HttpResponse(html)
 ```
-### django通过模板语言将变量嵌套html中(三)
+#### 4.django通过模板语言将变量嵌套html中(三)
 ```
 from django.template.loader import get_template
 from django.template import Context
@@ -149,7 +149,7 @@ def index(request):
 16、{% with %}
     用更简单的变量名缓存复杂的变量名
 ```
-[Django官网更多内置标签](https://docs.djangoproject.com/en/1.11/ref/templates/builtins/)
+[Django1.11 官网更多内置标签](https://docs.djangoproject.com/en/1.11/ref/templates/builtins/)
 #### 6.自定义方法filter或者simple_tag
 filter和simple_tag的区别：
 - filter：限制传参2个，支持 if 条件
