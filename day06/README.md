@@ -7,7 +7,6 @@
 
 [Django1.11 官网模板语言](https://docs.djangoproject.com/en/1.11/ref/templates/language/#templates)
 
-#![avatar](/day05/imgs/51.png)
 
 ## 一、Django如何执行
 ```
@@ -157,6 +156,7 @@ filter和simple_tag的区别：
 - simple_tag：不限制传参，不支持 if 条件
 
 1、在app01中创建templatetags模块(templatetags名字是不能变)
+
 2、创建任意 .py 文件，如：mysimple.py
 ```
 from django import template
@@ -230,6 +230,7 @@ https://docs.djangoproject.com/en/1.11/ref/templates/builtins/#include
      　　{% include "xx.html" %}  # 在子板中使用其他模板
 　　　{% block title %}{% endblock %}
 ```
+查看当前：layout.html assets.html userinfo.html xx.html
 
 
 

@@ -1,0 +1,21 @@
+{% extends 'layout.html' %}
+
+{% block css %}
+    <style></style>
+{% endblock %}
+
+{% block body %}
+    {% include 'xx.html' %}
+    <ul>
+    {% for item in user_list %}
+        <li>{{ item.username }},{{ item.salary }}</li>
+    {% endfor %}
+    </ul>
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        document.getElementById('userinfo').className = 'active';
+    </script>
+{% endblock %}
