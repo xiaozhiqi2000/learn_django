@@ -45,39 +45,39 @@ from app01 import models # 导入models模块
 ```
 #--------------------对象形式的查找--------------------------
 # 正向查找
-    ret1=models.Book.objects.first()
-    print(ret1.title)
-    print(ret1.price)
-    print(ret1.publisher)
-    print(ret1.publisher.name)  #因为一对多的关系所以ret1.publisher是一个对象,而不是一个queryset集合
+      ret1=models.Book.objects.first()
+      print(ret1.title)
+      print(ret1.price)
+      print(ret1.publisher)
+      print(ret1.publisher.name)  #因为一对多的关系所以ret1.publisher是一个对象,而不是一个queryset集合
 
 # 反向查找
-    ret2=models.Publish.objects.last()
-    print(ret2.name)
-    print(ret2.city)
-    #如何拿到与它绑定的Book对象呢?
-    print(ret2.book_set.all()) #ret2.book_set是一个queryset集合
+      ret2=models.Publish.objects.last()
+      print(ret2.name)
+      print(ret2.city)
+      #如何拿到与它绑定的Book对象呢?
+      print(ret2.book_set.all()) #ret2.book_set是一个queryset集合
 
 #---------------了不起的双下划线(__)之单表条件查询----------------
 
-#    models.Tb1.objects.filter(id__lt=10, id__gt=1)   # 获取id大于1 且 小于10的值
-#
-#    models.Tb1.objects.filter(id__in=[11, 22, 33])   # 获取id等于11、22、33的数据
-#    models.Tb1.objects.exclude(id__in=[11, 22, 33])  # not in
-#
-#    models.Tb1.objects.filter(name__contains="ven")
-#    models.Tb1.objects.filter(name__icontains="ven") # icontains大小写不敏感
-#
-#    models.Tb1.objects.filter(id__range=[1, 2])   # 范围bettwen and
-#
-#    startswith，istartswith, endswith, iendswith,
+      models.Tb1.objects.filter(id__lt=10, id__gt=1)   # 获取id大于1 且 小于10的值
+    
+      models.Tb1.objects.filter(id__in=[11, 22, 33])   # 获取id等于11、22、33的数据
+      models.Tb1.objects.exclude(id__in=[11, 22, 33])  # not in
+    
+      models.Tb1.objects.filter(name__contains="ven")
+      models.Tb1.objects.filter(name__icontains="ven") # icontains大小写不敏感
+    
+      models.Tb1.objects.filter(id__range=[1, 2])   # 范围bettwen and
+    
+      startswith，istartswith, endswith, iendswith,
 
 #----------------了不起的双下划线(__)之多表条件关联查询---------------
 
 # 正向查找(条件)
 
-#     ret3=models.Book.objects.filter(title='Python').values('id')
-#     print(ret3)#[{'id': 1}]
+      #ret3=models.Book.objects.filter(title='Python').values('id')
+      #print(ret3)#[{'id': 1}]
 
       #正向查找(条件)之一对多
 
@@ -96,19 +96,23 @@ from app01 import models # 导入models模块
 
 # 反向查找(条件)
 
-    #反向查找之一对多:
-    ret8=models.Publisher.objects.filter(book__title='Python').values('name')
-    print(ret8)#[{'name': '人大出版社'}]  注意,book__title中的book就是Publisher的关联表名
+      #反向查找之一对多:
+      ret8=models.Publisher.objects.filter(book__title='Python').values('name')
+      print(ret8)#[{'name': '人大出版社'}]  注意,book__title中的book就是Publisher的关联表名
 
-    ret9=models.Publisher.objects.filter(book__title='Python').values('book__authors')
-    print(ret9)#[{'book__authors': 1}, {'book__authors': 2}]
+      ret9=models.Publisher.objects.filter(book__title='Python').values('book__authors')
+      print(ret9)#[{'book__authors': 1}, {'book__authors': 2}]
 
-    #反向查找之多对多:
-    ret10=models.Author.objects.filter(book__title='Python').values('name')
-    print(ret10)#[{'name': 'alex'}, {'name': 'alvin'}]
+      #反向查找之多对多:
+      ret10=models.Author.objects.filter(book__title='Python').values('name')
+      print(ret10)#[{'name': 'alex'}, {'name': 'alvin'}]
 
-    #注意
-    #正向查找的book__title中的book是表名Book
-    #一对多和多对多在这里用法没区别
+      #注意
+      #正向查找的book__title中的book是表名Book
+      #一对多和多对多在这里用法没区别
 ```
 #### 总结
+1.对象式查询必须是单个对象，不能为QuerySet对象，可以加个fist()或者[0]，取第一个对象，如models.AuthorDetail.objcts.all()[0].author.name，适用一对多，多对多
+2.对象式反向查询也是要单个对象，通过该对象.关联表_set取到关联表的对象，如models.Publisher.objects.filter(id=1)[0].book_set.first().title，适用一对多，多对多
+3.双下划线条件查询正向，通过约束条件对应的字段__关联表的字段名来查找条件，如publisher = models.ForeignKey(Publisher), models.Book.objects.filter(publisher__name="人民出版社").values("publisher__address")
+4.双下划线条件查询反向，通过对应表名__字段名来查找条件，如models.Publisher.objects.filter(book__title="Go核心编程").values("name")
