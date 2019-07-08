@@ -41,24 +41,74 @@ python manage.py shell   # 进入django的shell
 
 from app01 import models # 导入models模块
 ```
-#### (3) 单表查询
+#### (3) 单表查询、一对多查询、多对多查询、对象式查询、双下划线查询
 ```
-# 获取所有用户的名字
-authorall = models.Author.objects.all()
-print(authorall.query)
+#--------------------对象形式的查找--------------------------
+# 正向查找
+    ret1=models.Book.objects.first()
+    print(ret1.title)
+    print(ret1.price)
+    print(ret1.publisher)
+    print(ret1.publisher.name)  #因为一对多的关系所以ret1.publisher是一个对象,而不是一个queryset集合
 
-# 获取名字是ShiZhongyu这个用户
-queryset = models.Author.objects.filter(name='ShiZhongyu')
-print(queryset.query)
-print(type(queryset))
-for item in queryset:
-    print(item.name)
-    print(item.address)
+# 反向查找
+    ret2=models.Publish.objects.last()
+    print(ret2.name)
+    print(ret2.city)
+    #如何拿到与它绑定的Book对象呢?
+    print(ret2.book_set.all()) #ret2.book_set是一个queryset集合
 
-# get是userinfo类 model 对象,不需要迭代取值,直接取,
-obj = models.Author.objects.get(id=10)
-print(type(obj))
-print(obj)  # 会自动执行UserInfo中__str__方法打印self.name所以是id=10的name
-print(obj.id)
-print(obj.name)
+#---------------了不起的双下划线(__)之单表条件查询----------------
+
+#    models.Tb1.objects.filter(id__lt=10, id__gt=1)   # 获取id大于1 且 小于10的值
+#
+#    models.Tb1.objects.filter(id__in=[11, 22, 33])   # 获取id等于11、22、33的数据
+#    models.Tb1.objects.exclude(id__in=[11, 22, 33])  # not in
+#
+#    models.Tb1.objects.filter(name__contains="ven")
+#    models.Tb1.objects.filter(name__icontains="ven") # icontains大小写不敏感
+#
+#    models.Tb1.objects.filter(id__range=[1, 2])   # 范围bettwen and
+#
+#    startswith，istartswith, endswith, iendswith,
+
+#----------------了不起的双下划线(__)之多表条件关联查询---------------
+
+# 正向查找(条件)
+
+#     ret3=models.Book.objects.filter(title='Python').values('id')
+#     print(ret3)#[{'id': 1}]
+
+      #正向查找(条件)之一对多
+
+      ret4=models.Book.objects.filter(title='Python').values('publisher__city')
+      print(ret4)  #[{'publisher__city': '北京'}]
+
+      #正向查找(条件)之多对多
+      ret5=models.Book.objects.filter(title='Python').values('author__name')
+      print(ret5)
+      ret6=models.Book.objects.filter(author__name="alex").values('title')
+      print(ret6)
+
+      #注意
+      #正向查找的publisher__city或者author__name中的publisher,author是book表中绑定的字段
+      #一对多和多对多在这里用法没区别
+
+# 反向查找(条件)
+
+    #反向查找之一对多:
+    ret8=models.Publisher.objects.filter(book__title='Python').values('name')
+    print(ret8)#[{'name': '人大出版社'}]  注意,book__title中的book就是Publisher的关联表名
+
+    ret9=models.Publisher.objects.filter(book__title='Python').values('book__authors')
+    print(ret9)#[{'book__authors': 1}, {'book__authors': 2}]
+
+    #反向查找之多对多:
+    ret10=models.Author.objects.filter(book__title='Python').values('name')
+    print(ret10)#[{'name': 'alex'}, {'name': 'alvin'}]
+
+    #注意
+    #正向查找的book__title中的book是表名Book
+    #一对多和多对多在这里用法没区别
 ```
+#### 总结
