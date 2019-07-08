@@ -38,12 +38,32 @@ DATABASES = {
     }
 }
 ```
-3、如使用pymysql模块则在和项目project同名的__init__中
+3、setttings中配置logging,即可与数据库相关操作都会把sql语句打印到终端中
+```
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+    }
+}
+```
+4、如使用pymysql模块则在和项目project同名的__init__中
 ```
 import pymysql
 pymysql.install_as_MySQLdb()
 ```
-4、创建model,继承自models.Model类
+5、创建model,继承自models.Model类
 ```
 class UserInfo(models.Modle):
     name = models.CharField(max_length=50)
@@ -52,7 +72,7 @@ class UserInfo(models.Modle):
     def __str__(self)
         return self.name
 ```
-5、数据库相关密令
+6、数据库相关密令
 ```
 python manage.py makemigrations
 python manage.py migrate
@@ -239,3 +259,14 @@ class Book(models.Model):
    - 多对多：(ManyToManyField) 自动创建第三张表(当然我们也可以自己创建第三张表：两个foreign key)
 
 [Django1.11 官网关系](https://docs.djangoproject.com/en/1.11/topics/db/models/#relationships)
+
+#### 4.自己建ManyToMany第三张表
+```
+class Book2Author(models.Model):
+    author = models.ForeignKey("Author")
+    book = models.ForeiginKey("Book")
+    
+    class Meta:
+        unique_together = ["author","book"]
+```
+
