@@ -121,11 +121,12 @@ models.类名.objects.get(id=2).delete()      # 不建议
 models.类名.objects.filter(id=2).delete()   # 推荐使用
 models.类名.objects.all().delete()
 ```
-#### 4.查询数据 get()、filter()、all()
+#### 4.查询数据 get()、filter()、all()、exclude()
 ```
 models.类名.objects.get(id=123)           # 获取单条数据，不存在则报错，多条数据也报错（不建议），
 models.类名.objects.all()                 # 获取全部，是一个Queryset对象需要迭代取值
 models.类名.objects.filter(name='tomcat') # 获取指定条件的数据，是一个Queryset对象需要迭代取值
+models.类名.objects.exclude(name__icontains="ven") # 排除指定条件的数据，是一个Queryset对象
 ```
 #### 5.显示字段 values()、values_list()
 ```
@@ -157,7 +158,6 @@ models.类名.objects.exclude(id__in=[11, 22, 33])  # not in
 ```
 models.类名.objects.filter(name__contains="ven")
 models.类名.objects.filter(name__icontains="ven")    # icontains大小写不敏感
-models.类名.objects.exclude(name__icontains="ven")
 ```
 #### 11.范围查询：__range 其他类似：__startswith,__endswith, __iendswith, __istartswith　　
 ```
