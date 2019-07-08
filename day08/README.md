@@ -159,12 +159,17 @@ models.类名.objects.filter(name__contains="ven")
 models.类名.objects.filter(name__icontains="ven")    # icontains大小写不敏感
 models.类名.objects.exclude(name__icontains="ven")
 ```
-#### 11.范围查询：__range
+#### 11.范围查询：__range 其他类似：__startswith,__endswith, __iendswith, __istartswith　　
 ```
 models.类名.objects.filter(id__range=[1, 2])   # 范围bettwen and
 ```
-#### 12.其他类似：__startswith,__endswith, __iendswith, __istartswith　　
-
+#### 12.exists() 
+如果QuerySet包含数据，就返回True，否则返回False
+```
+queryset = models.类名.objects.fiter(id=2)
+if queryset.exists():
+    print("True")
+```
 #### 13.排序：order_by("name") 相当于asc；order_by("-name") 相当于desc；　　
 ```
 models.类名.objects.filter(name='seven').order_by('id')     # asc,从小到大
