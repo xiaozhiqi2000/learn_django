@@ -52,7 +52,7 @@ from app01 import models # 导入models模块
       print(ret1.publisher.name)  #因为一对多的关系所以ret1.publisher是一个对象,而不是一个queryset集合
 
 # 反向查找
-      ret2=models.Publish.objects.last()
+      ret2=models.Publisher.objects.last()
       print(ret2.name)
       print(ret2.city)
       #如何拿到与它绑定的Book对象呢?
@@ -98,14 +98,14 @@ from app01 import models # 导入models模块
 
       #反向查找之一对多:
       ret8=models.Publisher.objects.filter(book__title='Python').values('name')
-      print(ret8)#[{'name': '人大出版社'}]  注意,book__title中的book就是Publisher的关联表名
+      print(ret8)  #[{'name': '人大出版社'}]  注意,book__title中的book就是Publisher的关联表名
 
       ret9=models.Publisher.objects.filter(book__title='Python').values('book__authors')
-      print(ret9)#[{'book__authors': 1}, {'book__authors': 2}]
+      print(ret9)  #[{'book__authors': 1}, {'book__authors': 2}]
 
       #反向查找之多对多:
       ret10=models.Author.objects.filter(book__title='Python').values('name')
-      print(ret10)#[{'name': 'alex'}, {'name': 'alvin'}]
+      print(ret10) #[{'name': 'alex'}, {'name': 'alvin'}]
 
       #注意
       #正向查找的book__title中的book是表名Book
