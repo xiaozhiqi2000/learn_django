@@ -1,7 +1,6 @@
 # encoding:utf8
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from blog import models
-# Create your views here.
 
 def addata(request):
     """
@@ -89,7 +88,7 @@ def danbiao(request):
     """
 
 
-    # get是userinfo类对象,不需要迭代取值,直接取,
+    # get是userinfo类 model 对象,不需要迭代取值,直接取,
     obj = models.UserInfo.objects.get(id=10)
     """
     print(type(obj))
@@ -188,25 +187,35 @@ def yiduiduo(request):
     :param request:
     :return:
     """
-    # 正向查询
+    # 一对多ForeignKey在多的那张表，从该表开始查询，称正向查询
+    # all()取出是一个queryset对象所以需要循环迭代
     obj = models.Host.objects.all()
+    """
     for i in obj:
         print(i.id)
         print(i.hostname)
         print(i.ip)
         print(i.user_group.caption)
+    """
 
     # 正向查询连表操作
-    obj1 = models.Host.objects.all().values('hostname', 'user_group__caption').first()
+    # values()是queryset对象但是后面firt()取第一条，返回字典
+    # 连表的时候foreignkey对应字段名字__关联表字段
+    obj1 = models.Host.objects.all().values('id', 'hostname', 'ip', 'user_group__caption').first()
+    """
     print(obj1)
     print(obj1['hostname'])
     print(obj1['user_group__caption'])
+    """
 
-    obj2 = models.Host.objects.all().values('hostname', 'user_group__caption')
+    # obj2[0] 和上面 obj1相同的，obj2是个queryset对象需要迭代取值
+    obj2 = models.Host.objects.all().values('id', 'hostname', 'ip',  'user_group__caption')
+    """
     print(type(obj2))
     for i in obj2:
         print(i.keys())
         print(i.values())
+    """
 
     # 反向查询
     obj3 = models.UserGroup.objects.all()
@@ -250,18 +259,19 @@ def duoduiduo(request):
     # 在关联连表的时候不知道填什么字段，故意填错，django会提示可以填入的字段
 
     # 正向添加数据,多对多的第三表存储的是两张表的主键id
+    group_obj = models.UserGroup.objects.get(id=1)
     user_info_obj = models.UserInfo.objects.get(id=1)
     user_info_objs = models.UserInfo.objects.all()
-    group_obj = models.UserGroup.objects.get(id=1)
+
 
     group_obj.user_info.add(user_info_obj)
     group_obj.user_info.add(*user_info_objs)
     group_obj.user_info.add(1)
-    group_obj.user_info.add(*[1,2,4])
+    group_obj.user_info.add(*[1, 2, 4])
 
     # 正向删除数据
     group_obj.user_info.clear()   # 清空所有与第三张表usergroup id=1的所有数据
-    group_obj.user_info.remove(*[2,3,4])  # 删除，2,3,4条数据
+    group_obj.user_info.remove(*[2, 3, 4])  # 删除，2,3,4条数据
 
     # 正向查询数据
     group_obj = models.UserGroup.objects.get(id=1)
@@ -305,8 +315,4 @@ def duoduiduo(request):
     print(dic)
 
     return render(request,'duoduiduo.html',locals())
-
-
-
-
 
