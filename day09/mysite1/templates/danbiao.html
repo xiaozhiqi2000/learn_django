@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>正向查询</h1>
+<table border="1px">
+    <tr>
+        <th>ID</th>
+        <th>姓名</th>
+    </tr>
+    {% for i in queryset %}
+    <tr>
+        <td>{{ i.id }}</td>
+        <td>{{ i.name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<hr>
+<table border="1px">
+    <tr>
+        <th>ID</th>
+        <th>姓名</th>
+    </tr>
+    {% for i in queryset1 %}
+    <tr>
+        <td>{{ i.id }}</td>
+        <td>{{ i.name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<hr>
+<table border="1px">
+    <tr>
+        <th>ID</th>
+        <th>姓名</th>
+    </tr>
+    {% for i in queryset2 %}
+    <tr>
+        <td>{{ i.id }}</td>
+        <td>{{ i.name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<hr>
+<table border="1px">
+    <tr>
+        <th>ID</th>
+        <th>姓名</th>
+    </tr>
+    {% for i in queryset3 %}
+    <tr>
+        <td>{{ i.id }}</td>
+        <td>{{ i.name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<hr>
+<table border="1px">
+    <tr>
+        <th>ID</th>
+        <th>姓名</th>
+    </tr>
+    {% for i in queryset4 %}
+    <tr>
+        <td>{{ i.id }}</td>
+        <td>{{ i.name }}</td>
+    </tr>
+    {% endfor %}
+</table>
+<hr>
+<table border="1px">
+    <tr>
+        <th>ID</th>
+        <th>姓名</th>
+    </tr>
+    {% for i in queryset5 %}
+    <tr>
+        <td>{{ i.0 }}</td>
+        <td>{{ i.1 }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<hr>
+
+    {% for i in queryset6 %}
+
+        {{ i }}
+
+    {% endfor %}
+
+</body>
+</html>
