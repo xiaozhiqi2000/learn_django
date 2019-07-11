@@ -221,7 +221,7 @@ models.Book.objects.update(price=F('price')+20)
 
 之前filter()过滤只能且的关系来查找，例如models.Book.objects.fileter(name__contains="L",authors__name="MaChao")，并不能或的关系和非的关系，有Q之后就可以有复杂的查询条件
 
-##### 1、Q对象(django.db.models.Q)可以对关键字参数进行封装，从而更好地应用多个查询
+##### (1)Q对象(django.db.models.Q)可以对关键字参数进行封装，从而更好地应用多个查询
 ```
 q1=models.Book.objects.filter(Q(title__startswith='L')).all()
 ```
