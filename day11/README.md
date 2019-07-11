@@ -89,6 +89,7 @@ class Book(models.Model):
 from django.contrib import admin
 from app01 import models
 
+# @admin.register(Author)#----->单给某个表加一个定制,就不不需要后面的admin.site.register(defindAdminAuthor,Author)
 class defindAdminAuthor(admin.ModelAdmin):
     list_display = ('id', 'name')
     ordering = ('id',)
@@ -119,13 +120,17 @@ admin.site.register(models.AuthorDetail, defindAdminAuthorDetail)
 admin.site.register(models.Publisher, defindAdminPublisher)
 admin.site.register(models.Book, defindAdminBook)
 ```
-#### 6.如果你觉得英文界面不好用，可以在setting.py 文件中修改以下选项
+#### 6.如图
 ![avatar](/day11/imgs/11.png)
 #### 7.如果你觉得英文界面不好用，可以在setting.py 文件中修改以下选项
 ```
 LANGUAGE_CODE = 'en-us'  #LANGUAGE_CODE = 'zh-hans'
 ```
 
+## 三、Admin 总结
+Django admin后台管理不是必要的，方便是方便，当然玩的6也不错
+
+没有admin 通过 url views modes tempalte 自己可以玩
 
 
 
