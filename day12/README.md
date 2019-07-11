@@ -16,7 +16,7 @@ web开发中使用session来完成会话跟踪,sessionid存在cookie中的键值
 
 cookie是存在客户端,session是存在服务器
 
-## 二、Cookie 配置
+## 二、Cookie
 ### 1.Cookie传递过程与本质
 Cookie是key-value结构,类似于一个python的字典 ,随着服务器端的响应发送给客户端浏览器,然后客户端浏览器会把Cookie保存起来,当下一次访问服务器时把cookie再发给服务器.
 
@@ -66,7 +66,7 @@ def login(request):
 index.html
 login.html
 
-## 三、Session 配置步骤
+## 三、Session
 
 参考：
 
