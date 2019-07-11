@@ -1,4 +1,4 @@
-# python 学习记录
+# Django 学习记录
 ### [day01 WEB框架 MTV MVC]()
 ### [day02 django 安装及常用命令]()
 ### [day03 django Settings配置文件]()
@@ -6,4 +6,6 @@
 ### [day05 django Views视图函数]()
 ### [day06 django Template模板]()
 ### [day07 django Models及ORM]()
-### [day08 django Admin]()
+### [day08 django Models实例操作一]()
+### [day09 django Models实例操作二]()
+### [day10 django Admin]()

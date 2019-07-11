@@ -179,24 +179,45 @@ models.类名.objects.filter(name='seven').order_by('-id')   # desc,从大到小
 ``` 
 models.类名.objects.all()[10:20]
 ```
-#### 15.分组与聚合：group_by,annotate,aggregate
+#### 15.分组与聚合：annotate、aggregate
 [Django1.11 官网aggregation](https://docs.djangoproject.com/en/1.11/topics/db/aggregation/)
 
 [Django1.11 官网annotate](https://docs.djangoproject.com/en/1.11/topics/db/annotate/)
-```
-annotate(*args, **kwargs)：可以为 QuerySet 中的每个对象添加注解。可以通过计算查询结果中每个对象所关联的对象集合，从而得出总计值(也可以是平均值或总和，等等)
-aggregate(*args, **kwargs)：通过对 QuerySet 进行计算，返回一个聚合值的字典。 aggregate() 中每个参数都指定一个包含在字典中的返回值。用于聚合查询
-Avg(返回所给字段的平均值)
-Count(根据所给的关联字段返回被关联 model 的数量)
-Max(返回所给字段的最大值)
-Min(返回所给字段的最小值)
-Sum(计算所给字段值的总和)
+aggregate(*args, **kwargs)：通过对 QuerySet 进行计算是针对单个对象，返回一个聚合值的字典。 aggregate() 中每个参数都指定一个包含在字典中的返回值。用于聚合查询
 
-# group by
+annotate(*args, **kwargs)：可以为 QuerySet 中的每个对象进行聚合，通过计算查询结果中每个对象所关联的对象集合，从而得出总计值(也可以是平均值或总和，等等)
+- Avg(返回所给字段的平均值)
+- Count(根据所给的关联字段返回被关联 model 的数量)
+- Max(返回所给字段的最大值)
+- Min(返回所给字段的最小值)
+- Sum(计算所给字段值的总和)
+```
 from django.db.models import Count, Min, Max, Sum
+# group by
 # models.类名.objects.filter(c1=1).values('id').annotate(c=Count('num'))
 # SELECT "app01_类名"."id", COUNT("app01_类名"."num") AS "c" FROM "app01_类名" WHERE "app01_类名"."c1" = 1 GROUP BY "app01_类名"."id"i
+
+#作者为LinChong出的书的价格总和
+a = models.Book.objects.filter(authors__name="LinChong").aggregate(Sum('price'))
+
+#以作者authors__name分组group by，每一个作者出的书的价格总和
+b = models.Book.objects.all().values("authors__name").annotate(Sum('price'))
+
+#以出版社分组group by，找出每个出版社出版的最低价格
+c = models.Book.objects.all().values("publisher__name").annotate(Min('price'))
 ```
+#### 16.F查询
+[Django1.11 官网F表达式](https://docs.djangoproject.com/en/1.11/ref/models/expressions/#f-expressions)
+
+F 使用查询条件的值,专门取对象中某列值的操作,就是对数据值进行操作的
+```
+# 例如要更新每本书的价格，在原有的价格加20，只有通过F才能批量对数值型字段进行计算,单个对象直接更新就可以了
+from django.db.models import F
+
+models.Book.objects.update(price=F('price')+20)
+```
+
+
 
 ## 三、原生SQL
 注意：使用原生sql的方式主要目的是解决一些很复杂的sql，不能用ORM的方式写出的问题。

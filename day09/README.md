@@ -114,5 +114,7 @@ from app01 import models # 导入models模块
 #### 总结
 1.对象式查询必须是单个对象，不能为QuerySet对象，可以加个fist()或者[0]，取第一个对象，如models.AuthorDetail.objcts.all()[0].author.name，适用一对多，多对多
 2.对象式反向查询也是要单个对象，通过该对象.关联表_set取到关联表的对象，如models.Publisher.objects.filter(id=1)[0].book_set.first().title，适用一对多，多对多
-3.双下划线条件查询正向，通过约束条件对应的字段__关联表的字段名来查找条件，如publisher = models.ForeignKey(Publisher), models.Book.objects.filter(publisher__name="人民出版社").values("publisher__address")
-4.双下划线条件查询反向，通过对应表名__字段名来查找条件，如models.Publisher.objects.filter(book__title="Go核心编程").values("name")
+3.双下划线条件查询：(1)通过约束条件对应的字段__关联表的字段名来查找条件，(2)通过对应表名__字段名来查找条件
+- publisher = models.ForeignKey(Publisher), models.Book.objects.filter(publisher__name="人民出版社").values("publisher__address")
+- authors = models.ManyToManyField(Author), models.Book.objects.filter(authors__name="MaChao").values("publisher__name")
+- models.Publisher.objects.filter(book__title="Go核心编程").values("name")
