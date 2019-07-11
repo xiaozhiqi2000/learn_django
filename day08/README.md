@@ -183,6 +183,7 @@ models.类名.objects.all()[10:20]
 [Django1.11 官网aggregation](https://docs.djangoproject.com/en/1.11/topics/db/aggregation/)
 
 [Django1.11 官网annotate](https://docs.djangoproject.com/en/1.11/topics/db/annotate/)
+
 aggregate(*args, **kwargs)：通过对 QuerySet 进行计算是针对单个对象，返回一个聚合值的字典。 aggregate() 中每个参数都指定一个包含在字典中的返回值。用于聚合查询
 
 annotate(*args, **kwargs)：可以为 QuerySet 中的每个对象进行聚合，通过计算查询结果中每个对象所关联的对象集合，从而得出总计值(也可以是平均值或总和，等等)
@@ -191,11 +192,10 @@ annotate(*args, **kwargs)：可以为 QuerySet 中的每个对象进行聚合，
 - Max(返回所给字段的最大值)
 - Min(返回所给字段的最小值)
 - Sum(计算所给字段值的总和)
+
+可以通过queryset.query打印出sql语句
 ```
 from django.db.models import Count, Min, Max, Sum
-# group by
-# models.类名.objects.filter(c1=1).values('id').annotate(c=Count('num'))
-# SELECT "app01_类名"."id", COUNT("app01_类名"."num") AS "c" FROM "app01_类名" WHERE "app01_类名"."c1" = 1 GROUP BY "app01_类名"."id"i
 
 #作者为LinChong出的书的价格总和
 a = models.Book.objects.filter(authors__name="LinChong").aggregate(Sum('price'))
@@ -216,8 +216,48 @@ from django.db.models import F
 
 models.Book.objects.update(price=F('price')+20)
 ```
+#### 17.Q查询
+之前filter()过滤只能且的关系来查找，例如models.Book.objects.fileter(name__contains="L",authors__name="MaChao")，并不能或的关系和非的关系，有Q之后就可以有复杂的查询条件
+```
+#1 Q对象(django.db.models.Q)可以对关键字参数进行封装，从而更好地应用多个查询
+q1=models.Book.objects.filter(Q(title__startswith='L')).all()
 
+# 2、可以组合使用&,|操作符，当一个操作符是用于两个Q的对象,它产生一个新的Q对象。
+Q(title__startswith='L') | Q(title__startswith='P')
 
+# 3、Q对象可以用~操作符放在前面表示否定，也可允许否定与不否定形式的组合
+Q(title__startswith='P') | ~Q(pub_date__year=2005)
+
+# 4、应用范围：
+
+    # Each lookup function that takes keyword-arguments (e.g. filter(),
+    #  exclude(), get()) can also be passed one or more Q objects as
+    # positional (not-named) arguments. If you provide multiple Q object
+    # arguments to a lookup function, the arguments will be “AND”ed
+    # together. For example:
+
+Book.objects.get(
+    Q(title__startswith='P'),
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6))
+)
+
+#sql:
+# SELECT * from polls WHERE question LIKE 'P%'
+#     AND (pub_date = '2005-05-02' OR pub_date = '2005-05-06')
+
+# import datetime
+# e=datetime.date(2005,5,6)  #2005-05-06
+
+# 5、Q对象可以与关键字参数查询一起使用，不过一定要把Q对象放在关键字参数查询的前面。
+# 正确：
+Book.objects.get(
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
+    title__startswith='P')
+# 错误：
+Book.objects.get(
+    question__startswith='P',
+    Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)))
+```
 
 ## 三、原生SQL
 注意：使用原生sql的方式主要目的是解决一些很复杂的sql，不能用ORM的方式写出的问题。
