@@ -221,7 +221,7 @@ models.Book.objects.update(price=F('price')+20)
 
 之前filter()过滤只能且的关系来查找，例如models.Book.objects.fileter(name__contains="L",authors__name="MaChao")，并不能或的关系和非的关系，有Q之后就可以有复杂的查询条件
 
-##### (1)Q对象(django.db.models.Q)可以对关键字参数进行封装，从而更好地应用多个查询
+##### 1、Q对象(django.db.models.Q)可以对关键字参数进行封装，从而更好地应用多个查询
 ```
 q1=models.Book.objects.filter(Q(title__startswith='L')).all()
 ```
@@ -229,11 +229,12 @@ q1=models.Book.objects.filter(Q(title__startswith='L')).all()
 ```
 Q(title__startswith='L') | Q(title__startswith='P')
 ```
-# 3、Q对象可以用~操作符放在前面表示否定，也可允许否定与不否定形式的组合
+##### 3、Q对象可以用~操作符放在前面表示否定，也可允许否定与不否定形式的组合
+```
 Q(title__startswith='P') | ~Q(pub_date__year=2005)
-
-# 4、应用范围：
-
+```
+##### 4、应用范围：
+```
     # Each lookup function that takes keyword-arguments (e.g. filter(),
     #  exclude(), get()) can also be passed one or more Q objects as
     # positional (not-named) arguments. If you provide multiple Q object
@@ -251,8 +252,9 @@ Book.objects.get(
 
 # import datetime
 # e=datetime.date(2005,5,6)  #2005-05-06
-
-# 5、Q对象可以与关键字参数查询一起使用，不过一定要把Q对象放在关键字参数查询的前面。
+```
+##### 5、Q对象可以与关键字参数查询一起使用，不过一定要把Q对象放在关键字参数查询的前面。
+```
 # 正确：
 Book.objects.get(
     Q(pub_date=date(2005, 5, 2)) | Q(pub_date=date(2005, 5, 6)),
