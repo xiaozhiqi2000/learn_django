@@ -110,6 +110,8 @@ class defindAdminBook(admin.ModelAdmin):
     """
     list_display = ('id', 'title', 'publication_date', 'price', 'publisher',)
     ordering = ('title',)
+    search_fields = ('title',)
+    list_filter = ('publisher',)
 
 #将models中的类名和对应admin的类名注册到admin表中
 admin.site.register(models.Author, defindAdminAuthor)
@@ -117,8 +119,9 @@ admin.site.register(models.AuthorDetail, defindAdminAuthorDetail)
 admin.site.register(models.Publisher, defindAdminPublisher)
 admin.site.register(models.Book, defindAdminBook)
 ```
-
 #### 6.如果你觉得英文界面不好用，可以在setting.py 文件中修改以下选项
+![avatar](/day011/imgs/11.png)
+#### 7.如果你觉得英文界面不好用，可以在setting.py 文件中修改以下选项
 ```
 LANGUAGE_CODE = 'en-us'  #LANGUAGE_CODE = 'zh-hans'
 ```
