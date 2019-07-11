@@ -29,7 +29,7 @@ Cookie是key-value结构,类似于一个python的字典 ,随着服务器端的�
 - Cookie大小上限为4KB； 
 - 一个服务器最多在客户端浏览器上保存20个Cookie； 
 - 一个浏览器最多保存300个Cookie；  
-### 3.Cookie 配置
+### 3.Cookie 实例配置
 url.py配置
 ```
 urlpatterns = [
