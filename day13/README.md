@@ -198,9 +198,10 @@ CACHE_MIDDLEWARE_KEY_PREFIX = ""  #如果使用相同的Django安装在多个站
 ```
 # 第一种在url配置缓存
 from django.views.decorators.cache import cache_page
+from app01 import views
 
 urlpatterns = [
-    url(r'^cachepage/',cache_page(60 * 15)(cacheview),name='cachepage'),
+    url(r'^cachepage/',cache_page(60 * 15)(views.cacheview),name='cachepage'),
 ]
 
 # 第二种在view配置缓存
