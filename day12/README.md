@@ -108,7 +108,7 @@ SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'     # 引擎
 # 5.sessions加密cookies存储在settings中的配置
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'# 引擎
 
-SESSION_COOKIE_NAME = "sessionid"                       # Session的cookie保存在浏览器上时的key，即：sessionid＝随机字符串（默认）
+SESSION_COOKIE_NAME = "sessionid"                       # Session的cookie保存在浏览器上时的key，即：sessionid=随机字符串（默认）
 SESSION_COOKIE_PATH = "/"                               # Session的cookie保存的路径（默认）
 SESSION_COOKIE_DOMAIN = None                             # Session的cookie保存的域名（默认）
 SESSION_COOKIE_SECURE = False                            # 是否Https传输cookie（默认）
@@ -161,6 +161,8 @@ urlpatterns = [
 ```
 views.py配置
 ```
+from django.shortcuts import render, redirect
+
 def session_login(request):
     if request.method == 'POST':
         user = request.POST.get('user')
@@ -190,8 +192,7 @@ def session_logout(request):
     request.session.flush()
     return redirect('/session_login/')
 ```
-本地文件session_login.html
-本地文件session_index.html
+本地文件session_login.html  session_index.html
 
 
 ### 4.分析django 怎么将session写入cookie中
