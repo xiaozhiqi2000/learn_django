@@ -191,7 +191,7 @@ MIDDLEWARE = [
 ]
 
 CACHE_MIDDLEWARE_ALIAS = "default" #用于存储的缓存别名。
-CACHE_MIDDLEWARE_SECONDS = 30      #每个页面应缓存的秒数。
+CACHE_MIDDLEWARE_SECONDS = 86400      #每个页面应缓存的秒数。
 CACHE_MIDDLEWARE_KEY_PREFIX = ""  #如果使用相同的Django安装在多个站点之间共享缓存，请将其设置为站点名称或此Django实例唯一的其他字符串，以防止发生密钥冲突。 如果你不在乎，请使用空字符串。
 ```
 ### 2.url或者view方式进行缓存
