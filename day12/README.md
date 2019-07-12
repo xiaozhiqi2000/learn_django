@@ -100,7 +100,6 @@ SESSION_CACHE_ALIAS = 'default'                                   # 使用的缓
 # 3.sessions文件存储在settings中的配置
 SESSION_ENGINE = 'django.contrib.sessions.backends.file'          # 引擎
 SESSION_FILE_PATH = None                                          # 缓存文件路径，如果为None，则使用tempfile模块获取一个临时地址tempfile.gettempdir() 
-                                                                  # 如：/var/folders/d3/j9tj0gz93dg06bmwxmhh6_xm0000gn/T
 
 # 4.sessions内存和数据库存储在settings中的配置
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'     # 引擎
