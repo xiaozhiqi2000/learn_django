@@ -32,7 +32,7 @@ function add(a,b){
 ```
 ### 2.Jquery Ajax 核心API
 
-'$.'ajax 详细用法及参数
+$.ajax 详细用法及参数
 ```
 url：请求地址
 type：请求方式，GET、POST（1.9.0之后用method）
@@ -88,7 +88,6 @@ dataType：将服务器端返回的数据转换成指定类型
     "jsonp": JSONP 格式
 
 #使用 JSONP 形式调用函数时，如 "myurl?callback=?" jQuery 将自动替换 ? 为正确的函数名，以执行回调函数
-
 #如果不指定，jQuery 将自动根据HTTP包MIME信息返回相应类型(an XML MIME type will yield XML, in 1.4 JSON will yield a JavaScript object, in 1.4 script will execute the script, and anything else will be returned as a string
 
 converters： 转换器，将服务器端的内容根据指定的dataType转换类型，并传值给success回调函数
@@ -111,7 +110,7 @@ converters： 转换器，将服务器端的内容根据指定的dataType转换�
 ```
 
 ### 3.Jquery Ajax 实例
-dataType
+#### dataType
 ```
 from django.shortcuts import render,HttpResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -157,7 +156,7 @@ def ajax_get(request):
     这样就不需要设定dataType:"json"了。
     content_type="application/json"和content_type="json"是一样的！
 ```
-dataFilter
+#### dataFilter
 ```
 function testData() {
 
@@ -175,7 +174,7 @@ function testData() {
        }
 });}
 ```
-beforesend
+#### beforesend
 ```
 function testData() {
     $.ajax('ajax_get', {
