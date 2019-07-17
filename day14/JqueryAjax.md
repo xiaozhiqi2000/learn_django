@@ -51,31 +51,27 @@ url：请求地址
 type：请求方式，GET、POST（1.9.0之后用method）
 headers：请求头
 data：要发送的数据,当前ajax请求要携带的数据，是一个json的object对象，ajax方法就会默认地把它编码成某种格式(urlencoded:?a=1&b=2)发送给服务端；此外，ajax默认以get方式发送请求。
-   unction testData() {
-    $.ajax("/test",{     //此时的data是一个json形式的对象
-       data:{
-         a:1,
-         b:2
-       }      
-    });                   //?a=1&b=2
-contentType：即将发送信息至服务器的内容编码类型(默认: "application/x-www-form-urlencoded; charset=UTF-8")
-    用来指明当前请求的数据编码格式；urlencoded:?a=1&b=2；如果想以其他方式提交数据，
-    比如contentType:"application/json"，即向服务器发送一个json字符串： 
-      $.ajax("/ajax_get",{
-    
-         data:JSON.stringify({
-              a:22,
-              b:33
-          }),
-          contentType:"application/json",
-          type:"POST",
-          
-      });                          //{a: 22, b: 33}
+processData：声明当前的data数据是否进行转码或预处理，默认为true，即预处理；if为false，那么对data：{a:1,b:2}会调用json对象的toString()方法，即{a:1,b:2}.toString(),最后得到一个［object，Object］形式的结果。{"1":"111","2":"222","3":"333"}.toString();//[object Object]该属性的意义在于，当data是一个dom结构或者xml数据时，我们希望数据不要进行处理，直接发过去，就可以讲其设为true。
+contentType：即将发送信息至服务器的内容编码类型(默认: "application/x-www-form-urlencoded; charset=UTF-8")用来指明当前请求的数据编码格式；urlencoded:?a=1&b=2；如果想以其他方式提交数据，比如contentType:"application/json"，即向服务器发送一个json字符串： 
+traditional：设置为true，一般是我们的data数据有数组时会用到 ：data:{a:22,b:33,c:["x","y"]}, traditional为false会对数据进行深层次迭代；  
+    function testData() {
+    $.ajax({       //此时的data是一个json形式的对象
+       url:"/jquery_get/",
+       type:"POST"
+       data:{a:1,b:2,c:["x","y"]},      
+       tradtional:true,
+       processData:false,
+    }); //?a=1&b=2
+
+   $.ajax("/ajax_get/",{
+      type:"POST",
+      data:JSON.stringify({a:22,b:33}),
+      contentType:"application/json",
+   });  //{a: 22, b: 33}
 
     注意：contentType:"application/json"一旦设定，data必须是json字符串，不能是json对象
-async：是否异步
+async：是否异步,默认是true
 timeout：设置请求超时时间（毫秒）
-traditional：一般是我们的data数据有数组时会用到 ：data:{a:22,b:33,c:["x","y"]}, traditional为false会对数据进行深层次迭代；  
 
 beforeSend：发送请求前执行的函数(全局)
 success：成功之后执行的回调函数(全局)
