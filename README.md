@@ -10,3 +10,5 @@
 #### [day09 django Models实例操作一]()
 #### [day10 django Models实例操作二]()
 #### [day11 django Models Admin]()
+#### [day12 django Models Cookie&Session]()
+#### [day13 django Models Cache缓存]()
