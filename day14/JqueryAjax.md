@@ -7,21 +7,34 @@ jQuery其实就是一个JavaScript的类库，其将复杂的功能做了上层�
 - jQuery 不是生产者，而是大自然搬运工。
 - jQuery Ajax本质 XMLHttpRequest 或 ActiveXObject 
 
-### 1.快捷API
+### 1.$.ajax的高级API
+$.get()、$.post()、$getJSON()、$.getScript()是对$.ajax()的高级封装，但是不常用，只用 $.ajax()
 ```
-$.get(url, [data], [callback], [type])
+$.get(url, [data], [callback], [type])      # callback的形参是后端返回的数据, function (data) {}如果后端有返回数据data就有数据
 $.post(url, [data], [callback], [type])
 $.getJSON(url, [data], [callback], [type])  #最主要是用来进行jsonp跨域操作的
-$.getScript(url, [data], [callback])        #使用 AJAX 请求，获取和运行 JavaScript
+$.getScript(js_file, [callback])        #使用 AJAX 请求，获取和运行 JavaScript,什么时候加载js，用这个方法加载就好
 
 url: 待载入页面的URL地址
 data: 待发送 Key/value 参数。
 success: 载入成功时回调函数。
-dataType: 返回内容格式，xml, json,  script, text, html
+type: 告诉后端返回内容格式，xml, json,  script, text, html
+
+function testJsGet() {
+    $.get('/jquery_ajax/', function (data,stateText,obj) {
+    //$.post('/jquery_ajax/', function (data,stateText,obj) {
+        // 回调函数有这三个参数，data是后端返回的数据，stateText是这次请求scuess,error,obj 就是XMLrequest对象
+        console.log(arguments);
+        console.log(data);
+        console.log(stateText);
+        console.log(obj);
+    });
+}
+
 
 function testGetScript() {
     $.getScript('test.js', function () {
-    alert(add(1, 6));
+        alert(add(1, 6));
     });
 }
 
