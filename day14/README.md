@@ -2,7 +2,7 @@
 [Ajax]()
 
 ## 一、Ajax 预备知识(json进阶)
-<a href="https://github.com/xiaozhiqi2000/learn_django/blob/master/day14/jsonAdvance.md" target="_blank">Json进阶知识</a>
+[Json进阶知识](https://github.com/xiaozhiqi2000/learn_django/blob/master/day14/jsonAdvance.md")
 
 ## 二、Ajax
 ### 1.Ajax 概述
@@ -69,5 +69,4 @@ AJAX除了异步的特点外,还有一个特点是:**浏览器页面局部刷新
 
 底层Ajax是通过 XMLHTTPRequest 对象实现
 
-[原生Ajax实现]()
-<a href="https://github.com/xiaozhiqi2000/learn_django/blob/master/day14/SourceAjax.md" target="_blank">原生Ajax实现</a>
+[原生Ajax实现](https://github.com/xiaozhiqi2000/learn_django/blob/master/day14/SourceAjax.md")
