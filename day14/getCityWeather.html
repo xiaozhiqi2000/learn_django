@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX跨域</title>
+</head>
+<body>
+ 
+    <input type="button" value="获取天气" onclick="SubmitData()"/>
+ 
+    <div class="container">
+ 
+    </div>
+    <script src="../jquery-1.12.4.js"></script>
+    <script>
+        function SubmitData() {
+            $.ajax({
+                url:'http://wthrcdn.etouch.cn/weather_mini?city=%E6%B7%B1%E5%9C%B3',
+                data:{},
+                type:'GET',
+                success:function (arg) {
+                    // 当请求执行完成之后,自动调用
+                    // arg,服务器返回的数据
+                    console.log(typeof arg);
+                    var new_arg = JSON.parse(arg);
+                    console.log(new_arg);
+                    $.each(new_arg,function (k,v) {
+                        console.log(v.forecast);
+                        var listarry = v.forecast;
+                        $.each(listarry,function (k, v) {
+                            console.log(v);
+                            var da = v.date;
+                            console.log(da);
+                            var ty = v.type;
+                            var lo = v.low;
+                            var hi = v.high;
+                            var fengli = v.fengli;
+                            var tag = "<p>" + da + ty + lo + hi + fengli + "</p>";
+                            $(".container").append(tag);
+                        })
+ 
+                    });
+                },
+                error:function () {
+                    // 当请求错误之后,自动调用
+                }
+            })
+        }
+    </script>
+</body>
+</html>

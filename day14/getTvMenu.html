@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AJAX跨域</title>
+</head>
+<body>
+ 
+    <input type="button" value="获取节目" onclick="SubmitData()"/>
+ 
+    <div class="container">
+ 
+    </div>
+    <script src="jquery-1.12.4.js"></script>
+    <script>
+        function SubmitData() {
+            $.ajax({
+                url:'http://www.jxntv.cn/data/jmd-jxtv2.html?callback=list',
+                data:{},
+                type:'GET',
+                dataType:'jsonp',
+                jsonp:'callback',  // callback是固定写法
+                jsonpCallback: 'list',   // list是要么是自定义要么是服务器端一致
+                success:function (arg) {
+                    // 当请求执行完成之后,自动调用
+                    // arg,服务器返回的数据
+                    console.log(arg);
+                    var jsonpArray = arg.data;
+                    $.each(jsonpArray,function (k, v) {
+                        // k,下标索引
+                        // v,数组值
+                        console.log(v);
+                        var week = v.week;
+                        var temp = "<h1>" + week + "</h1>";
+                        $('.container').append(temp);
+                        var listArray = v.list;
+                        $.each(listArray,function (kk,vv) {
+                            var link = vv.link;
+                            var name = vv.name;
+                            var tempNew = "<a target='_blank' href='" + link + "'>" + name + "</a><br/>";
+                            $('.container').append(tempNew);
+                        })
+ 
+                    })
+                },
+                error:function () {
+                    // 当请求错误之后,自动调用
+                }
+            })
+        }
+    </script>
+</body>
+</html>
