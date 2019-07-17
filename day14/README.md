@@ -54,7 +54,7 @@ AJAX除了异步的特点外,还有一个特点是:**浏览器页面局部刷新
 - AJAX虽然提高了用户体验，但无形中向服务器发送的请求次数增多了，导致服务器压力增大；
 - 因为AJAX是在浏览器中使用Javascript技术完成的，所以还需要处理浏览器兼容性问题；
 
-### 4.Ajax 技术
+### 4.原生Ajax 技术
 **四步操作**
 - 创建核心对象；
 - 使用核心对象打开与服务器的连接；
@@ -71,3 +71,30 @@ AJAX除了异步的特点外,还有一个特点是:**浏览器页面局部刷新
 底层Ajax是通过 XMLHTTPRequest 对象实现
 
 [原生Ajax实现](https://github.com/xiaozhiqi2000/learn_django/blob/master/day14/SourceAjax.md")
+
+### 5.Jquery Ajax 技术
+
+jQuery其实就是一个JavaScript的类库，其将复杂的功能做了上层封装，使得开发者可以在其基础上写更少的代码实现更多的功能
+
+jQuery Ajax本质 XMLHttpRequest 或 ActiveXObject 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

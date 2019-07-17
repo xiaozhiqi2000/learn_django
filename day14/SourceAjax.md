@@ -88,7 +88,7 @@ xmlHttp.onreadystatechange = function() {
 
 注意 :form表单会默认这个键值对;不设定，Web服务器会忽略请求体的内容。
 
-2.在发送时可以指定请求体了：xmlHttp.send(“username=yuan&password=123”)
+2.在发送时可以指定请求体了：xmlHttp.send(“username=python&password=123”)
 
 ### 5.Ajax 实现小结
 ```
@@ -105,53 +105,76 @@ XMLHttpRequest对象的status属性表示服务器状态码，它只有在readyS
 
 XMLHttpRequest对象的responseText属性表示服务器响应内容，它只有在readyState为4时才能获取到！
 ```
-### 6.原生Ajax实例
+### 6.原生Ajax实例(用户是否已经被注册)
+#### (1)功能介绍
+
+在注册表单中，当用户填写了用户名后，把光标移开后，会自动向服务器发送异步请求。服务器返回true或false，返回true表示这个用户名已经被注册过，返回false表示没有注册过。
+
+客户端得到服务器返回的结果后，确定是否在用户名文本框后显示“用户名已被注册”的错误信息！
+
+#### (2)案例分析
+- 页面中给出注册表单；
+- 在username表单字段中添加onblur事件，调用send()方法；
+- send()方法获取username表单字段的内容，向服务器发送异步请求，参数为username；
+- django 的视图函数：获取username参数，判断是否为“python”，如果是响应true，否则响应false
 ```
-<h1>AJAX</h1>
-<button onclick="send()">测试</button>
-<div id="div1"></div>
+<script type="text/javascript">
+        function createXMLHttpRequest() {
+            try {
+                return new XMLHttpRequest();
+            } catch (e) {
+                try {
+                    return new ActiveXObject("Msxml2.XMLHTTP");
+                } catch (e) {
+                    return new ActiveXObject("Microsoft.XMLHTTP");
+                }
+            }
+        }
 
-
-<script>
-    function createXMLHttpRequest() {
-         try {
-             return new XMLHttpRequest();//大多数浏览器
-         } catch (e) {
-             try {
-                 return new ActiveXObject("Msxml2.XMLHTTP");
-             } catch (e) {
-                 return new ActiveXObject("Microsoft.XMLHTTP");
-             }
-         }
-     }
-
-    function send() {
-         var xmlHttp = createXMLHttpRequest();
-         xmlHttp.onreadystatechange = function() {
-             if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
-                 var div = document.getElementById("div1");
-                 div.innerText = xmlHttp.responseText;
-                 div.textContent = xmlHttp.responseText;
-             }
-         };
-
-         xmlHttp.open("POST", "/ajax_post/", true);
-         //post: xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-         xmlHttp.send(null);  //post: xmlHttp.send("b=B");
-    }
-
-
+        function send() {
+            var xmlHttp = createXMLHttpRequest();
+            xmlHttp.onreadystatechange = function() {
+                if(xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+                    if(xmlHttp.responseText == "true") {
+                        document.getElementById("error").innerText = "用户名已被注册！";
+                        document.getElementById("error").textContent = "用户名已被注册！";
+                    } else {
+                        document.getElementById("error").innerText = "";
+                        document.getElementById("error").textContent = "";
+                    }
+                }
+            };
+            xmlHttp.open("POST", "/ajax_check/", true, "json");
+            xmlHttp.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+            var username = document.getElementById("username").value;
+            xmlHttp.send("username=" + username);
+        }
 </script>
-       
-#--------------------------------views.py 
+
+//--------------------------------------------------index.html
+
+<h1>注册</h1>
+<form action="" method="post">
+用户名：<input id="username" type="text" name="username" onblur="send()"/><span id="error"></span><br/>
+密　码：<input type="text" name="password"/><br/>
+<input type="submit" value="注册"/>
+</form>
+
+
+//--------------------------------------------------views.py
 from django.views.decorators.csrf import csrf_exempt
 
 def login(request):
     print('hello ajax')
     return render(request,'index.html')
+    # return HttpResponse('hello python')
 
-@csrf_exempt   ＃csrf防御
-def ajax_post(request):
+@csrf_exempt
+def ajax_check(request):
     print('ok')
-    return HttpResponse('helloyuanhao') 
+
+    username=request.POST.get('username',None)
+    if username=='python':
+        return HttpResponse('true')
+    return HttpResponse('false')
 ```
