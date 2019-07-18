@@ -48,6 +48,7 @@ JSON字符串内的值：
 之所以称json对象为js的子集，是因为像undefined,NaN,{'name':'python'}等都不在json对象的范畴。
 
 ### 2.python与json对象的转换关系
+在json的编码过程中，会存在从python原始类型向json类型的转换过程
 ```
 python         -->        json
 dict                      object
