@@ -76,7 +76,7 @@ timeout：设置请求超时时间（毫秒）
 beforeSend：发送请求前执行的函数(全局)
 success：成功之后执行的回调函数(全局)
 error：失败之后执行的回调函数(全局)
-complete：完成之后执行的回调函数(全局)
+complete：完成之后执行的回调函数,不管成功或者失败(全局)
 statusCode: 状态码
     $.ajax('/user/allusers', {
 
@@ -86,7 +86,7 @@ statusCode: 状态码
 
         error: function (jqXHR, textStatus, err) {
 
-            // jqXHR: jQuery增强的xhr
+            // jqXHR: jQuery增强的xhr,就是XMLrequest对象
             // textStatus: 请求完成状态
             // err: 底层通过throw抛出的异常对象，值与错误类型有关
             console.log(arguments);
@@ -105,6 +105,9 @@ statusCode: 状态码
                 
             },
             '400': function () {
+                //Django HttpResponse.status_code="400"可以模拟400错误码
+                console.log('status code 400');
+                console.log('error 400');
             }
         }
     });    
