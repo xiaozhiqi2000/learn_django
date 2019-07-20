@@ -2,18 +2,18 @@
 [django Model(三)实例操作]()
 
 ## 实例操作
-### 1.查看mysite1/app01/models.py
-- 作者模型表Author：一个作者有姓名。
-- 作者详细模型表AuthorDetail：把作者的详情放到详情表，包含性别，email地址和出生日期，作者详情模型和作者模型之间是一对一的关系（one－to－one）（类似于每个人和他的身份证之间的关系），在大多数情况下我们没 有必要将他们拆分成两张表，这里只是引出一对一的概念。
-- 出版商模型表Publisher：出版商有名称，地址，所在城市，省，国家和网站。
-- 书籍模型表Book：书籍有书名和出版日期，一本书可能会有多个作者，一个作者也可以写多本书，所以作者和书籍的关系就是多对多的关联关系（many－to－many），一本书只应该由一个出版商出版，所以出版商和书籍是一对多关联关系（one－to－many），也被称作外键。
+### 1.查看mysite/blog/models.py
+- 帐号UserProfile：一个帐号有用户名和密码。假设一个帐号对应是一个用户详情,在大多数情况下我们没 有必要将他们拆分成两张表，这里只是引出一对一的概念,（one－to－one）
+- 用户详情表UserInfo：用户包括姓名,邮箱,地址,用户类型
+- 用户组：这里组表现的是职位,有CEO,CTO,COO，一个用户可以有多个职位,一个职位也可以有多个用户,所以用户详情与用户组的关系就是多对多的关联关系（many－to－many）
+- 主机：主机包括主机名和IP地址，假设一个用户组可以有多台主机,所以用户组与主机的关系是（one-to-many）
 
 同步数据库
 ```
 python manage.py makemigrations
 python manage.py migrate
 ```
-### 2.查看mysite1/urls.py
+### 2.查看mysite/urls.py
 - add 批量创建数据
 - danbiao 单表查询数据
 - yiduiyi 一对一查询数据
@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'^duoduiduo/', views.duoduiduo),
 ]
 ```
-### 3.查看mysite1/app01/views.py
+### 3.查看mysite/blog/views.py
 #### (1) 批量创建数据
 ```
 python manage.py runserver 8080
@@ -41,24 +41,4 @@ python manage.py shell   # 进入django的shell
 
 from app01 import models # 导入models模块
 ```
-#### (3) 单表查询
-```
-# 获取所有用户的名字
-authorall = models.Author.objects.all()
-print(authorall.query)
-
-# 获取名字是ShiZhongyu这个用户
-queryset = models.Author.objects.filter(name='ShiZhongyu')
-print(queryset.query)
-print(type(queryset))
-for item in queryset:
-    print(item.name)
-    print(item.address)
-
-# get是userinfo类 model 对象,不需要迭代取值,直接取,
-obj = models.Author.objects.get(id=10)
-print(type(obj))
-print(obj)  # 会自动执行UserInfo中__str__方法打印self.name所以是id=10的name
-print(obj.id)
-print(obj.name)
-```
+#### (3) 查看mysite/blog/views.py,单表,一对一,一对多,多对多操作
