@@ -3,9 +3,7 @@
 参考:
 
 [优秀博客2.2](http://docs.30c.org/djangobook2/)
-
 [Django官网2](https://docs.djangoproject.com/en/2.2/)
-
 [Django2中文](http://www.liujiangblog.com/course/django/2)
 
 ##### [day01 WEB框架 MTV MVC](https://github.com/xiaozhiqi2000/learn_django/tree/master/day01#%E4%BB%8A%E5%A4%A9%E4%B8%BB%E8%A6%81%E5%86%85%E5%AE%B9)
