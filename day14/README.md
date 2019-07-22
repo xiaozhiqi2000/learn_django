@@ -162,9 +162,82 @@ JSONP是JSON with Padding的略称。可以让网页从别的域名（网站）�
 [跨域传输cookie](https://github.com/xiaozhiqi2000/learn_django/blob/master/day14/ajaxchuanchucookie.md)
 
 
+## 三、实例
+本地域名请求实例
+
+HTML
+```
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax请求</title>
+</head>
+<body>
+    <div>
+        <p>用户名:<input type="text" id="username"/></p>
+    </div>
+    <div>
+        <p>密码:<input type="password" id="pwd"/></p>
+    </div>
+    <input type="button" value="提交" onclick="SubmitForm();"/>
+
+    <script src="/static/jquery-1.12.4.js"></script>
+    <script>
+        function SubmitForm() {
+            $.ajax({
+                url:'/web/',
+                type:'POST',
+                data:{'user':$('#username').val(),'pwd':$('#pwd').val()},
+                dataType:'json',
+                success:function (data) {
+                    // data = 字符串 '{'status':xxx,'message':xxx}'
+                    // var data_dict = JSON.parse(data) 将字符串格式的字典转换为字典
+                    // 如果上面一步没写，则需要写dataType:'json',
+                    if(data.status){
+                        location.href = 'http://www.baidu.com';
+                    }else{
+                        alert(data.message);
+                    }
+                }
+            })
+        }
+    </script>
+</body>
+</html>
+```
+urls
+```
+from django.conf.urls import url,include
+from django.contrib import admin
+from ajax import views
 
 
+urlpatterns = [
+    url(r'^admin/', admin.site.urls),
+    url(r'^web/', views.ajax_demo),
+]
+```
+views
+```
+from django.shortcuts import render,HttpResponse,redirect
 
+import json
+
+def ajax_demo(request):
+    if request.method == 'POST':
+        ret = {'status':False,'message':''}
+        user = request.POST.get('user',None)
+        pwd = request.POST.get('pwd',None)
+        if user == 'tom' and pwd == '123':
+            ret['status'] = True
+            return HttpResponse(json.dumps(ret))
+        else:
+            ret['message'] = '用户名或密码错误'
+            return HttpResponse(json.dumps(ret))
+
+    return render(request,'ajax_demo.html')
+```
 
 
 
