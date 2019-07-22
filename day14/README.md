@@ -87,42 +87,10 @@ jQuery Ajax本质 XMLHttpRequest 或 ActiveXObject
 简单的来说，浏览器允许包含在页面A的脚本访问第二个页面B的数据资源，这一切是建立在A和B页面是同源的基础上。
 
 如果Web世界没有同源策略，当你登录淘宝账号并打开另一个站点时，这个站点上的JavaScript可以跨域读取你的淘宝账号数据，这样整个Web世界就无隐私可言了。
-#### (2)jsonp的js实现
+#### (2)JSONP JS AND AJAX
 JSONP是JSON with Padding的略称。可以让网页从别的域名（网站）那获取资料，即跨域读取数据。
 
-它是一个非官方的协议，它允许在服务器端集成Script tags返回至客户端，通过javascript callback的形式实现跨域访问（这仅仅是JSONP简单的实现形式）。
-
-JSONP就像是JSON+Padding一样(Padding这里我们理解为填充)
-```
-#---------------------------http://127.0.0.1:8001/login
-
- def login(request):
-    print('hello ajax')
-    return render(request,'index.html')
- #---------------------------返回用户的index.html
- <h1>发送JSONP数据</h1>
-
-
-<script>
-    function fun1(arg){
-        alert("hello"+arg)
-    }
-</script>
-<script src="http://127.0.0.1:8002/get_byjsonp/"></script>  //返回：<script>fun1("python")</script>
-
-#-----------------------------http://127.0.0.1:8002/get_byjsonp
-
-def get_byjsonp(req):
-    print('8002...')
-    return HttpResponse('fun1("python")')
-```
-
-#### (2)
-
-
-
-
-
+[Jquery JS and Ajax](https://github.com/xiaozhiqi2000/learn_django/blob/master/day14/JsonpAjax.md)
 
 
 
