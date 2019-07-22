@@ -7,7 +7,7 @@
 ## 一、Django 内置分页
 views.py
 ```
-rom django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 
 def listing(request):
