@@ -36,11 +36,9 @@ MIDDLEWARE_CLASSES = [
 - process_exception(self, request, exception)
 - process_response(self, request, response)   最后必须return response
 
-以上方法的返回值可以是None和HttpResonse对象，如果是None，则继续按照django定义的规则向下执行，如果是HttpResonse对象，则直接将该对象返回给用户。
+以上方法的返回值可以是None或一个HttpResponse对象，如果是None，则继续按照django定义的规则向后继续执行，如果是HttpResponse对象，则直接将该对象返回给用户。
 
-django 1.10以下版本,如果process_request方法中有return语句则后面的所有request都不执行，所有的process_response都会执行，在django 1.10中有return则后面的
-
-所有rerquest方法都不会执行,response只会这个request所属的这个的response才会执行，其他的response不会执行
+当用户发起请求的时候会依次经过所有的的中间件，这个时候的请求时process_request,最后到达views的函数中，views函数处理后，在依次穿过中间件，这个时候是process_response,最后返回给请求者。
 
 ![avatar](/day16/imgs/16.png)
 
@@ -51,7 +49,7 @@ django 1.10以下版本,如果process_request方法中有return语句则后面�
 方法执行错误了，则会执行process_exception方法，最后执行process_response方法。
 
 ## 二、自定义中间件
-1、创建中间件类
+1.创建中间件类
 ```
 from django.utils.deprecation import MiddlewareMixin
 
@@ -70,7 +68,7 @@ class defindemiddleware(MiddlewareMixin):
         print(end)
         return response
 ```
-2、注册中间件
+2.注册中间件
 ```
 MIDDLEWARE_CLASSES = (
     'my.middleware.defindedmiddleware',     # 目录结构my/middleware/类名
@@ -82,4 +80,22 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
+```
+
+## 三、一个简单的例子
+高流量的站点通常需要将Django部署在负载平衡proxy之后。 这种方式将带来一些复杂性，其一就是每个request中的远程IP地址(request.META["REMOTE_IP"])将指向该负载平衡proxy，而不是发起这个request的实际IP。 负载平衡proxy处理这个问题的方法在特殊的 X-Forwarded-For 中设置实际发起请求的IP。
+
+因此，需要一个小小的中间件来确保运行在proxy之后的站点也能够在 request.META["REMOTE_ADDR"] 中得到正确的IP地址
+```
+class SetRemoteAddrFromForwardedFor(object):
+    def process_request(self, request):
+        try:
+            real_ip = request.META['HTTP_X_FORWARDED_FOR']
+        except KeyError:
+            pass
+        else:
+            # HTTP_X_FORWARDED_FOR can be a comma-separated list of IPs.
+            # Take just the first one.
+            real_ip = real_ip.split(",")[0]
+            request.META['REMOTE_ADDR'] = real_ip
 ```
