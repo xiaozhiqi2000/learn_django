@@ -7,7 +7,7 @@
 
 [Django1.11 官网settings](https://docs.djangoproject.com/en/1.11/topics/settings/)
 
-### 1.django默认创建app会在这里注册,在创建app时,需要手动添加来
+### 1.django默认创建app会在这里注册,再创建其他app时,需要手动添加来如 crm.apps.CrmConfig
 ```
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -40,6 +40,9 @@ pymysql.install_as_MySQLdb()
 ```
 
 ### 3.templates是用于放置模板html,在django1.9以上中会自动创建并设置,之前版本要自己添加
+
+模板的查找顺序： 根目录templates > 已注册的app目录templates
+
 ```
 TEMPLATES = [
     {
@@ -184,15 +187,4 @@ def upload_file(request):
     {% csrf_token %}
 </form>
 ```
-
-
-
-
-
-
-
-
-
-
-
 
